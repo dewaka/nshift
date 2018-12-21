@@ -17,9 +17,20 @@
 
 int main(int argc, const char * argv[]) {
     if (argc == 1) { return 0; }
-    float strength = [[NSString stringWithUTF8String:argv[1]] floatValue] / 100;
+    
+    NSString *command = [NSString stringWithUTF8String:argv[1]];
     CBBlueLightClient *client = [[CBBlueLightClient alloc] init];
-    if (strength != 0.0) { [client setStrength:strength commit:true]; }
-    [client setEnabled:(strength != 0.0)];
+    
+    if ([command isEqualToString:@"enable"]) {
+        [client setEnabled:true];
+    } else if ([command isEqualToString:@"disable"]) {
+        [client setEnabled:false];
+    } else {
+        float strength = [command floatValue] / 100;
+        
+        if (strength != 0.0) { [client setStrength:strength commit:true]; }
+        [client setEnabled:(strength != 0.0)];
+    }
+    
     return 0;
 }
